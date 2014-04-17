@@ -16,5 +16,8 @@ RUN sed -i "s/^daemonize yes/daemonize no/" /etc/redis/redis.conf && \
 # Expose ports.
 EXPOSE 6379
 
+# Add volume
+VOLUME ["/var/lib/redis"]
+
 # Define an entry point.
 ENTRYPOINT ["redis-server"]
