@@ -5,23 +5,22 @@ MAINTAINER Bernard Potocki <bernard.potocki@imanel.org>
 RUN apt-add-repository -y ppa:chris-lea/redis-server && \
     apt-get update -qq && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
-      redis-server=2:2.8.*
+      redis-server
 
 # Configure Redis
 RUN sed -i "s/^daemonize yes/daemonize no/" /etc/redis/redis.conf && \
     sed -i "s/^bind 127.0.0.1/bind 0.0.0.0/" /etc/redis/redis.conf && \
     sed -i "s/^logfile /# logfile /" /etc/redis/redis.conf && \
+    sed -i "s/^dir .*/dir \/data\/redis/" /etc/redis/redis.conf && \
     sysctl vm.overcommit_memory=1 > /dev/null
 
 # Add run script
-ADD run /usr/local/bin/run
-RUN chmod +x /usr/local/bin/run
+ADD services/redis /etc/service/redis
 
 # Expose ports
 EXPOSE 6379
 
 # Add volume
-VOLUME ["/var/lib/redis"]
+VOLUME ["/data/redis"]
 
-# Define an entry point
-ENTRYPOINT ["/usr/local/bin/run"]
+CMD ["/sbin/my_init"]
