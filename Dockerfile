@@ -11,8 +11,7 @@ RUN apt-add-repository -y ppa:chris-lea/redis-server && \
 RUN sed -i "s/^daemonize yes/daemonize no/" /etc/redis/redis.conf && \
     sed -i "s/^bind 127.0.0.1/bind 0.0.0.0/" /etc/redis/redis.conf && \
     sed -i "s/^logfile /# logfile /" /etc/redis/redis.conf && \
-    sed -i "s/^dir .*/dir \/data\/redis/" /etc/redis/redis.conf && \
-    sysctl vm.overcommit_memory=1 > /dev/null
+    sed -i "s/^dir .*/dir \/data\/redis/" /etc/redis/redis.conf
 
 # Add run script
 ADD services/redis /etc/service/redis
